@@ -1,4 +1,4 @@
-CU-s-Labs
+CU-Labs
 =========
 
-This are the labs produced in subject Introduction to Object Oriented Programming (110CT) at Coventry University 
+These are the labs produced in subject Introduction to Object Oriented Programming (110CT) at Coventry University 
