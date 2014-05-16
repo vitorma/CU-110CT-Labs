@@ -21,6 +21,6 @@
 *.app
 
 #Debug folder
-**/Debug/
+*/Debug/
 Debug/
 Debug
