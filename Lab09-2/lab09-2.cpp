@@ -20,10 +20,12 @@
 using namespace std;
 
 class student {
-public:
+private:
 	string name;
 	string surname;
 	int number;
+
+public:
 
 	student(string name, string surname, int number) {
 		this->name = name;
@@ -32,13 +34,38 @@ public:
 	}
 
 	student() {}
+
+	string getName() {
+		return name;
+	}
+
+	string getSurname() {
+			return surname;
+		}
+
+	int getNumber() {
+			return number;
+		}
+
+	void setName(string name) {
+		this->name = name;
+	}
+
+	void setsurname(string surname) {
+		this->surname = surname;
+	}
+
+	void setNumber(int number) {
+		this->number = number;
+	}
 };
 
 class studentStorage {
-public:
+private:
 	int count;
 	student students[10];
 
+public:
 	studentStorage() {
 		this->count = 0;
 	}
@@ -53,28 +80,26 @@ public:
 	}
 
 	bool edit(int studentNumber, string name, string surname) {
-		if (getStudentByNumber(studentNumber).name == "null")
+		if (getStudentByNumber(studentNumber).getName() == "null")
 			return false;
-		student s = getStudentByNumber(studentNumber);
-		s.name = name;
-		s.surname = surname;
+		student &s = getStudentByNumber(studentNumber);
+		s.setName(name);
+		s.setsurname(surname);
 		return true;
-
-		return false;
 	}
 
-	student getStudentByNumber(int studentNumber) {
+	student& getStudentByNumber(int studentNumber) {
 		for (int i = 0; i < count; i++) {
-			if (students[i].number == studentNumber) {
+			if (students[i].getNumber() == studentNumber) {
 				return students[i];
 			}
 		}
-		return student("null", "null", 0);
+		return * new student("null", "null", 0);
 	}
 
-	student getStudentByPosition(int position) {
+	student& getStudentByPosition(int position) {
 		if (position > count) {
-			return student("null", "null", 0);
+			return * new student("null", "null", 0);
 		}
 		return students[position];
 	}
@@ -85,7 +110,7 @@ public:
 };
 
 //utility method to convert strings to int
-bool String2Int(const std::string& str, int& result) {
+bool String2Int(const string& str, int& result) {
 	std::string::const_iterator i = str.begin();
 
 	if (i == str.end())
@@ -130,10 +155,14 @@ void addStudents(studentStorage &students) {
 	cout << "Enter the student number: ";
 	string temp;
 	cin >> temp;
-	String2Int(temp, number);
-	student s(name, surname, number);
+	if(!String2Int(temp, number)) {
+		cout << "student number invalid!" << endl;
+		cout << "student not added!" << endl;
+		return;
+	}
+	student  s(name, surname, number);
 	if (students.add(s)) {
-		cout << "student added successfully";
+		cout << "student added successfully" << endl;
 	} else {
 		cout << "I can't add more students";
 	}
@@ -146,13 +175,12 @@ void listStudents(studentStorage &students) {
 		return;
 	}
 	for (int i = 0; i < students.getNumberOfStudents(); ++i) {
-		cout << "Student Name: " << students.getStudentByPosition(i).name
+		cout << "Student Name: " << students.getStudentByPosition(i).getName()
 				<< endl;
-		cout << "Student Surname: " << students.getStudentByPosition(i).surname
+		cout << "Student Surname: " << students.getStudentByPosition(i).getSurname()
 				<< endl;
-		cout << "Student number: " << students.getStudentByPosition(i).number
+		cout << "Student number: " << students.getStudentByPosition(i).getNumber()
 				<< endl;
-		cout << "------------------------------" << endl;
 	}
 
 }
@@ -163,15 +191,17 @@ void editStudent(studentStorage &students) {
 	string surname;
 	cout << "Type the student's number that you want to edit: ";
 	cin >> numberToFind;
-	if (students.getStudentByNumber(numberToFind).name == "null") {
+	if (students.getStudentByNumber(numberToFind).getName() == "null") {
 		cout << "student not found ";
 
 	} else {
-		student s = students.getStudentByNumber(numberToFind);
+		student& s = students.getStudentByNumber(numberToFind);
 		cout << "Type the new student's name: ";
 		cin >> name;
 		cout << "Type the new student's surname: ";
 		cin >> surname;
+		students.edit(s.getNumber(), name, surname);
+
 	}
 
 }
@@ -180,6 +210,7 @@ int main() {
 	studentStorage students;
 	char userInput;
 	while (userInput != 'q') {
+		cout << "------------------------------" << endl;
 		cout << "Select an option below" << endl;
 		cout << "a. add a student" << endl;
 		cout << "l. list student" << endl;
@@ -187,6 +218,7 @@ int main() {
 		cout << "q. quit" << endl;
 		cout << "Type the option: " << endl;
 		cin >> userInput;
+		cout << "------------------------------" << endl;
 		switch (userInput) {
 		case 'a':
 			addStudents(students);
@@ -197,7 +229,11 @@ int main() {
 		case 'e':
 			editStudent(students);
 			break;
+		case 'q':
+			cout << "Bye!" << endl;
+			break;
 		default:
+			cout << "Invalid option!" << endl;
 			break;
 
 		}

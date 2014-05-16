@@ -4,13 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../lab05.cpp 
+../lab05-1.cpp 
 
 OBJS += \
-./lab05.o 
+./lab05-1.o 
 
 CPP_DEPS += \
-./lab05.d 
+./lab05-1.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
