@@ -47,6 +47,8 @@ void randomArray(int array[], int size) {
 	}
 }
 
+
+
 void printArray(int array[], int n) {
 	for (int i = 0; i < n; i++)
 		printf("%d ", array[i]);
